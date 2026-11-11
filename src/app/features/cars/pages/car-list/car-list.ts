@@ -1,22 +1,17 @@
-import { Component, OnInit, inject } from '@angular/core';
-import { AsyncPipe } from '@angular/common';
+import { Component, inject } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
-import { Observable } from 'rxjs';
 import { CarService } from '../../services/car.service';
-import { Car } from '../../models/car.model';
 import { CarCard } from '../car-card/car-card';
 
 @Component({
   selector: 'app-car-list',
-  imports: [AsyncPipe, CarCard, RouterLink],
+  imports: [CarCard, RouterLink],
   templateUrl: './car-list.html',
   styleUrl: './car-list.scss',
 })
-export class CarList implements OnInit {
+export class CarList {
   private carService = inject(CarService);
-  cars$!: Observable<Car[]>;
 
-  ngOnInit(): void {
-    this.cars$ = this.carService.getCars();
-  }
+  cars = toSignal(this.carService.getCars());
 }

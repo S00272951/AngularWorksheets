@@ -1,12 +1,12 @@
 <h2>Car List</h2>
 <a routerLink="/cars/new" class="btn">+ Add Car</a>
 
-@if (cars$ | async; as cars) {
+@if (cars(); as list) {
   <div class="grid">
-    @for (car of cars; track car._id) {
+    @for (car of list; track car._id) {
       <app-car-card [car]="car" />
     }
   </div>
 } @else {
-  Loading cars...
+  <p>Loading cars...</p>
 }
