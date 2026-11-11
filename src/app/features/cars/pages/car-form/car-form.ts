@@ -5,6 +5,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatCardModule } from '@angular/material/card';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { CreateCarDto } from '../../models/car.model';
 import { CarService } from '../../services/car.service';
 
@@ -16,7 +17,8 @@ import { CarService } from '../../services/car.service';
     MatButtonModule,
     MatFormFieldModule,
     MatInputModule,
-    MatCardModule
+    MatCardModule,
+    MatProgressBarModule
   ],
   templateUrl: './car-form.html',
   styleUrl: './car-form.scss',
@@ -29,9 +31,9 @@ export class CarForm {
   saving = signal(false);
   saveError = signal<string | null>(null);
 
-   readonly currentYear = new Date().getFullYear();
+  readonly currentYear = new Date().getFullYear();
 
- carForm = this.formBuilder.nonNullable.group({
+  carForm = this.formBuilder.nonNullable.group({
     make: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(30)]],
     model: ['', [Validators.required, Validators.maxLength(30)]],
     year: this.formBuilder.control<number | null>(null, [Validators.min(1950), Validators.max(this.currentYear + 1),]),
@@ -43,6 +45,7 @@ export class CarForm {
 
     this.saving.set(true);
     this.saveError.set(null);
+    this.carForm.disable();
 
     this.carService.addCar(newCar).subscribe({
       next: (response) => {
@@ -52,6 +55,7 @@ export class CarForm {
       error: (err: Error) => {
         this.saveError.set(err.message);
         this.saving.set(false);
+        this.carForm.enable();
       },
     });
   }
