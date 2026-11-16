@@ -1,8 +1,8 @@
 <form [formGroup]="carForm" (ngSubmit)="onSubmit()" class="car-form">
-    @if (saving()) {
+  @if (saving()) {
   <mat-progress-bar mode="buffer" />
   }
-  
+
   <h2>Car Details Form</h2>
 
   <mat-form-field appearance="outline">
@@ -15,6 +15,9 @@
     } @else if (carForm.controls.make.hasError('maxlength')) {
       <mat-error>Make must be 30 characters or fewer</mat-error>
     }
+    @if (carForm.controls.make.hasError('blank')) {
+      <mat-error>Make cannot be only spaces</mat-error>
+    }
   </mat-form-field>
 
   <mat-form-field appearance="outline">
@@ -24,6 +27,9 @@
       <mat-error>Model is required</mat-error>
     } @else if (carForm.controls.model.hasError('maxlength')) {
       <mat-error>Model must be 30 characters or fewer</mat-error>
+    }
+    @if (carForm.controls.model.hasError('blank')) {
+      <mat-error>Model cannot be only spaces</mat-error>
     }
   </mat-form-field>
 
@@ -45,3 +51,4 @@
     </button>
     <a matButton routerLink="/cars">Cancel</a>
   </div>
+</form>
